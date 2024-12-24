@@ -15,6 +15,7 @@ from collections import deque
 import time
 import re
 from config import YTO_MESSAGE_FORMATS, YTO_SERVICE_ID, NEW_YTO_MESSAGE_COUNT, ORDER_FORMAT
+from selenium.common.exceptions import NoSuchElementException
 
 class YtoHandler:
     def __init__(self, redis_queue):
@@ -98,9 +99,15 @@ class YtoHandler:
     
     def close_dialog(self):
         """关闭弹窗"""
-        dialog_close_button = self.driver.find_element(By.CLASS_NAME, "el-dialog__close")
-        if dialog_close_button:
-            dialog_close_button.click()
+        try:
+            dialog_close_button = self.driver.find_element(By.CSS_SELECTOR, 'button[aria-label="Close"]')
+            if dialog_close_button:
+                dialog_close_button.click()
+        except NoSuchElementException:
+            return False
+        except Exception as e:
+            logger.error(f"关闭弹窗失败: {e}")
+            raise  # 重新抛出异常
     
     def send_message(self, message: str) -> bool:
         """发送消息到圆通系统"""
