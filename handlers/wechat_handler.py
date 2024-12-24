@@ -162,7 +162,7 @@ class WeChatHandler:
         """处理群消息"""
         try:
             # if not self.current_session_id == session_id:
-            session_item.Click(simulateMove=True)
+            session_item.Click(simulateMove=False)
             
             self.current_session_id = session_id
 
@@ -224,7 +224,7 @@ class WeChatHandler:
                 logger.error("找不到输入框")
                 return False
 
-            edit_box.Click(simulateMove=True)
+            edit_box.Click(simulateMove=False)
             time.sleep(random.uniform(0.5, 1))
             self.wx.SendKeys(formated_message + '{Enter}', waitTime=0.1)
             # self.wx.SendKeys('{Enter}', waitTime=0.1)
