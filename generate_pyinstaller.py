@@ -28,7 +28,7 @@ def get_pyinstaller_command():
     ])
 
     if platform.system() == "Windows":
-        return f"pyinstaller --onefile {data_args} {hidden_imports} {main_file} --windowed --name yto_wechart"
+        return f"pyinstaller --onefile {data_args} {hidden_imports} {main_file} --name yto_wechart"
     else:
         return f"pyinstaller --onefile {data_args.replace(';', ':')} {main_file}"
 
