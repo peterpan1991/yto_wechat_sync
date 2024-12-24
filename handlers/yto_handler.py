@@ -93,7 +93,12 @@ class YtoHandler:
     def format_message(self, msg:str) -> str:
         """格式化消息"""
         if re.search(r"人工", msg):
-            return re.find(ORDER_FORMAT, msg) + ", 您稍等[玫瑰][玫瑰][玫瑰]"
+            match = re.search(ORDER_FORMAT[0], msg)
+            if match:
+                order_number = match.group()  # 获取匹配的订单号
+                return f"{order_number}, 您稍等[玫瑰][玫瑰][玫瑰]"
+            else:
+                return msg
         else:
             return msg
     
