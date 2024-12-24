@@ -14,7 +14,7 @@ from models.redis_queue import RedisQueue
 from collections import deque
 import time
 import re
-from config import YTO_MESSAGE_FORMATS, YTO_SERVICE_ID, NEW_YTO_MESSAGE_COUNT
+from config import YTO_MESSAGE_FORMATS, YTO_SERVICE_ID, NEW_YTO_MESSAGE_COUNT, ORDER_FORMAT
 
 class YtoHandler:
     def __init__(self, redis_queue):
@@ -89,10 +89,26 @@ class YtoHandler:
                 return True
         return False
     
+    def format_message(self, msg:str) -> str:
+        """格式化消息"""
+        if re.search(r"人工", msg):
+            return re.find(ORDER_FORMAT, msg) + ", 您稍等[玫瑰][玫瑰][玫瑰]"
+        else:
+            return msg
+    
+    def close_dialog(self):
+        """关闭弹窗"""
+        dialog_close_button = self.driver.find_element(By.CLASS_NAME, "el-dialog__close")
+        if dialog_close_button:
+            dialog_close_button.click()
+    
     def send_message(self, message: str) -> bool:
         """发送消息到圆通系统"""
         try:
             # # 找到消息输入框
+            # 判断页面是否有弹窗
+            self.close_dialog()
+
             # 
             message_input = self.driver.find_element(By.ID, "edit-content")
             # 清除输入框，输入框不是input或textarea元素，而是div，contenteditable="true"
@@ -106,7 +122,7 @@ class YtoHandler:
             # message_input.send_keys(message)
                     
             # # 点击发送按钮
-            send_button = self.driver.find_element(By.CLASS_NAME, "button-violet")
+            send_button = self.driver.find_element(By.CLASS_NAME, "send-btn")
             send_button.click()
             
             logger.info(f"消息已发送到圆通系统: {message}")
@@ -119,6 +135,9 @@ class YtoHandler:
     def handle_yto_message(self) -> List[Message]:
         """尝试获取并处理消息，带重试机制"""
         try:
+            # 关闭页面弹窗
+            self.close_dialog()
+            
             message_elements = self.driver.find_elements(By.CSS_SELECTOR, ".news-box")
 
             #获取最后几条，避免数据过多，数据被顶掉
@@ -143,6 +162,7 @@ class YtoHandler:
                         continue
                     
                     if self.is_valid_message(msg_content):
+                        msg_content = self.format_message(msg_content)
                         # 如果消息未处理过，添加到缓冲区
                         if msg_content and self.redis_queue.is_message_in_yto_processed_queue(msg_content) is False:
                             self.redis_queue.put_yto_processed_message(msg_content)

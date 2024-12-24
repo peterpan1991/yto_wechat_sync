@@ -10,7 +10,7 @@ from models.message import MessageSource
 from models.redis_queue import RedisQueue
 from collections import deque
 import re
-from config import CUSTOME_SERVICE_PATTERNS, WECHAT_MESSAGE_FORMATS, MONITORED_GROUPS, NEW_WECHAT_MESSAGE_COUNT, PROCESS_TYPE
+from config import CUSTOME_SERVICE_PATTERNS, WECHAT_MESSAGE_FILTER, WECHAT_MESSAGE_FORMATS, MONITORED_GROUPS, NEW_WECHAT_MESSAGE_COUNT, PROCESS_TYPE
 
 class WeChatHandler:
     def __init__(self, redis_queue):
@@ -108,6 +108,12 @@ class WeChatHandler:
     def is_valid_message(self, msg: str) -> bool:
         """过滤消息"""
         # 过滤掉不符合规则的消息
+        filer_patterns = WECHAT_MESSAGE_FILTER
+        for pattern in filer_patterns:
+            match = re.search(pattern, msg, re.DOTALL)
+            if match:
+                return False
+
         patterns = WECHAT_MESSAGE_FORMATS
         for pattern in patterns:
             match = re.search(pattern, msg, re.DOTALL)
