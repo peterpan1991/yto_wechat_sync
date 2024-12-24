@@ -100,11 +100,13 @@ class YtoHandler:
     def close_dialog(self):
         """关闭弹窗"""
         try:
-            dialog_close_button = self.driver.find_element(By.CSS_SELECTOR, 'button[aria-label="Close"]')
-            if dialog_close_button:
-                dialog_close_button.click()
-        except NoSuchElementException:
-            return False
+            dialog_close_buttons = self.driver.find_elements(By.CSS_SELECTOR, 'button[aria-label="Close"]')
+            for button in dialog_close_buttons:
+                if button.is_displayed() and button.is_enabled():
+                    button.click()
+                    break
+            else:
+                return False
         except Exception as e:
             logger.error(f"关闭弹窗失败: {e}")
             raise  # 重新抛出异常
