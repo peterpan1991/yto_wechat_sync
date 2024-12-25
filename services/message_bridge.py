@@ -1,3 +1,4 @@
+import datetime
 import random
 import re
 from threading import Thread
@@ -114,6 +115,12 @@ class MessageBridge:
 
         try:
             while self.is_running:
+                # 获取当前时间
+                now = datetime.now()
+                # 检查是否达到晚上23点
+                if now.hour == 23 and now.minute >= 50:
+                    logger.info("到达晚上23点50分，正在关闭...")
+                    self.is_running = False
                 time.sleep(1)
         except KeyboardInterrupt:
             logger.info("接收到退出信号，正在关闭...")
