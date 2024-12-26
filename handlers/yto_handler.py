@@ -92,6 +92,7 @@ class YtoHandler:
     
     def format_message(self, msg:str) -> str:
         """格式化消息"""
+        msg = msg.replace("客服潘", "")
         if re.search(r"人工", msg):
             match = re.search(ORDER_FORMAT[0], msg)
             if match:

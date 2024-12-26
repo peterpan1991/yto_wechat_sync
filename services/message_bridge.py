@@ -64,6 +64,7 @@ class MessageBridge:
                         send_times = 0
                         max_while_times = 30
                         while_times = 0
+                        content = ""
                         while True:
                             time.sleep(2)
                             while_times += 1                            
@@ -78,22 +79,24 @@ class MessageBridge:
                                     continue
 
                                 # 将消息发送到微信
-                                self.wechat.send_message(yto_msg.content, msg.session_id, group_name)
+                                content = content + yto_msg.content + "\n"
                                 is_send = True
                                 send_times += 1
-                                time.sleep(random.uniform(1, 2))
-
+                                
                             if not is_send:
                                 retry_count += 1
                             
                             logger.info(f"获取圆通消息循环次数: {retry_count}, 发送次数: {send_times}")
                             
                             if retry_count >= self.max_retries or send_times >= order_count:
+                                if content:
+                                    self.wechat.send_message(content, msg.session_id, group_name)
+                                    time.sleep(random.uniform(1, 2))
                                 break
                                 
                             if while_times >= max_while_times:
-                                break                            
-
+                                break
+                            
                     time.sleep(random.uniform(1, 2))
                 time.sleep(random.uniform(1, 2))
             except Exception as e:

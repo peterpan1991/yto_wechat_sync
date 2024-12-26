@@ -200,7 +200,7 @@ class WeChatHandler:
 
     def filter_message(self, msg: str) -> str:
         """过滤消息"""
-        msg = msg.replace('\n', ' ')
+        msg = msg.replace('\n', '^{Enter}')
         return re.sub(r'@\w+', '', msg)
 
     def send_message(self, message: str, session_id: str, group_name:str) -> bool:
