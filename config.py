@@ -41,7 +41,7 @@ CUSTOME_SERVICE_PATTERNS = [
 	r"大黄",
 	r"巧儿",
 	r"佳佳",
-	r"Y",
+	r"^Y$",
 	r"小圆服务.*",
 ]
 
