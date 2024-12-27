@@ -38,8 +38,8 @@ class WeChatHandler:
             logger.info("微信窗口初始化成功")
 
             """初始化会话列表"""
-            # if not self.init_groups():
-            #     return False
+            if not self.init_groups():
+                return False
             return True
         except Exception as e:
             logger.error(f"初始化微信窗口失败: {e}")
