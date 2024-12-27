@@ -38,8 +38,8 @@ class WeChatHandler:
             logger.info("微信窗口初始化成功")
 
             """初始化会话列表"""
-            if not self.init_groups():
-                return False
+            # if not self.init_groups():
+            #     return False
             return True
         except Exception as e:
             logger.error(f"初始化微信窗口失败: {e}")
@@ -61,6 +61,7 @@ class WeChatHandler:
                 group_name = re.sub(r'\d+条新消息$', '', item.Name)
                 session_id = next((k for k, v in self.monitoring_groups.items() if v == group_name), None)
                 if group_name and session_id is not None:
+                    logger.info(f"会话:{session_id} - {item}")
                     self.group_cache[session_id] = item
                     
             logger.info(f"会话列表初始化成功")
@@ -148,8 +149,8 @@ class WeChatHandler:
                     group_name = re.sub(r'\d+条新消息$', '', session_item.Name)
                     session_id = next((k for k, v in self.monitoring_groups.items() if v == group_name), None)
 
-                    # 判断group在监控群里面 且 在拿到的会话列表里面
-                    if session_id is not None and session_id in self.group_cache:
+                    # 判断group在监控群里面
+                    if session_id is not None:
                         group_handles[session_id] = session_item
 
             return group_handles
