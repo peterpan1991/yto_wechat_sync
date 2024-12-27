@@ -95,11 +95,14 @@ class YtoHandler:
         msg = msg.replace("客服潘", "")
         if re.search(r"人工", msg):
             match = re.search(ORDER_FORMAT[0], msg)
+            order_number = '无有效订单'
             if match:
                 order_number = match.group()  # 获取匹配的订单号
-                return f"{order_number}, 您稍等[玫瑰][玫瑰][玫瑰]"
+            if re.search(r"已存在有效拦截", msg):
+                return f"{order_number}, 已存在有效拦截"
             else:
-                return msg
+                return f"{order_number}, 您稍等[玫瑰][玫瑰][玫瑰]"
+
         else:
             return msg
     
