@@ -60,7 +60,7 @@ PROCESS_TYPE = "wechat_send"  # wechat_recieve wechat_send
 MONITORED_GROUPS = {
 	"1": 'yto-test群',
 	"2": 'yto-test2群',
-    "3": 'yto-test3群',
+    "3": '圆通与从不童售后群',
     "4": 'yto-test4群',
     "5": 'AA 酷唛童 圆通镇安售后群',
     "6": '小脚Y圆通售后群',

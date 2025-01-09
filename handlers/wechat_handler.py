@@ -179,7 +179,10 @@ class WeChatHandler:
                     latest_messages = children[-get_message_count:]  # 可以调整获取的消息数量
                     
                     for msg_item in latest_messages:
-                        sender_name = msg_item.TextControl().Name
+                        if msg_item.TextControl().Exists():
+                            sender_name = msg_item.TextControl().Name
+                        else:
+                            continue
                         # 过滤圆通客服
                         if self.is_valid_message(msg_item.Name) and self.is_customer(sender_name):
                             msg_content = msg_item.Name
