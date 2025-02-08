@@ -148,7 +148,7 @@ class WeChatHandler:
                     
                     group_name = re.sub(r'\d+条新消息$', '', session_item.Name)
                     session_id = next((k for k, v in self.monitoring_groups.items() if v == group_name), None)
-                    logger.error(f"获取当前会话group: {group_name} - {session_id}")
+                    #logger.error(f"获取当前会话group: {group_name} - {session_id}")
                     # 判断group在监控群里面
                     if session_id is not None:
                         group_handles[session_id] = session_item
