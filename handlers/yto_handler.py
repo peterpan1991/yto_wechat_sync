@@ -16,6 +16,7 @@ import time
 import re
 from config import YTO_MESSAGE_FORMATS, YTO_SERVICE_ID, NEW_YTO_MESSAGE_COUNT, ORDER_FORMAT
 from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.chrome.service import Service
 
 class YtoHandler:
     def __init__(self, redis_queue):
@@ -33,8 +34,10 @@ class YtoHandler:
 
             # 连接到已打开的浏览器
             options = Options()
-            options.add_experimental_option("debuggerAddress", "127.0.0.1:9222")
-            self.driver = webdriver.Chrome(options=options)
+            options.add_experimental_option("debuggerAddress", "127.0.0.1:9111")
+            driverPath = "C:\\Program Files\\Google\\Chrome\\Application\\chromedriver.exe"
+            service = Service(driverPath)
+            self.driver = webdriver.Chrome(options=options,service=service)
 
             # self.monitor_new_message()
             logger.info("浏览器初始化成功")

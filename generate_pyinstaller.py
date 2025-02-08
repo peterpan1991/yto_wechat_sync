@@ -2,7 +2,7 @@ import os
 import platform
 
 def get_pyinstaller_command():
-    base_dir = r"d:\project\python\yto_wechart\message_bridge"
+    base_dir = r"C:\Users\Administrator\Documents\GitHub\yto_wechat_sync"
     main_file = os.path.join(base_dir, ".", "main.py")
     
     data_files = [
