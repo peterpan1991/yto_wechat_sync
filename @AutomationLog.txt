@@ -1,1 +1,2 @@
 2025-01-01 09:06:01.962 wechat_handler.py[182] handle_group_message -> Find Control Timeout(10s): {ControlType: TextControl}
+2025-02-12 15:14:02.168 wechat_handler.py[183] handle_group_message -> Find Control Timeout(10s): {ControlType: TextControl}
