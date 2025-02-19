@@ -66,7 +66,7 @@ class MessageBridge:
                         while_times = 0
                         content = ""
                         while True:
-                            time.sleep(2)
+                            time.sleep(1)
                             while_times += 1                            
                             yto_messages = self.yto.handle_yto_message()
                             is_send = False
@@ -96,7 +96,7 @@ class MessageBridge:
                             if while_times >= max_while_times:
                                 break
                             
-                    time.sleep(random.uniform(1, 2))
+                    time.sleep(random.uniform(0.5, 1))
                 time.sleep(random.uniform(0.5, 1))
             except Exception as e:
                 logger.error(f"执行出错: {e}")
@@ -120,7 +120,7 @@ class MessageBridge:
                 # 获取当前时间
                 now = datetime.now()
                 # 检查是否达到晚上23点
-                if now.hour == 23 and now.minute >= 50:
+                if now.hour == 23 and now.minute >= 55:
                     logger.info("到达晚上23点50分，正在关闭...")
                     self.is_running = False
                 time.sleep(1)
