@@ -62,7 +62,7 @@ class MessageBridge:
                         order_count = len(order_numbers)
                         retry_count = 0
                         send_times = 0
-                        max_while_times = 30
+                        max_while_times = 20
                         while_times = 0
                         content = ""
                         while True:
@@ -96,7 +96,7 @@ class MessageBridge:
                             if while_times >= max_while_times:
                                 break
                             
-                    time.sleep(random.uniform(0.5, 1))
+                    time.sleep(random.uniform(1, 1.5))
                 time.sleep(random.uniform(0.5, 1))
             except Exception as e:
                 logger.error(f"执行出错: {e}")

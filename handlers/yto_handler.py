@@ -17,6 +17,7 @@ import re
 from config import YTO_MESSAGE_FORMATS, YTO_SERVICE_ID, NEW_YTO_MESSAGE_COUNT, ORDER_FORMAT
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.support.ui import WebDriverWait
 
 class YtoHandler:
     def __init__(self, redis_queue):
@@ -200,3 +201,24 @@ class YtoHandler:
         except Exception as e:
             logger.error(f"获取圆通消息失败: {e}")
             raise  # 重新抛出异常
+
+    def login(self) -> bool:
+        """登录圆通"""
+        try:
+            self.driver.refresh()
+
+            # 等待页面加载完成
+            WebDriverWait(self.driver, 10).until(
+                EC.presence_of_element_located((By.CLASS_NAME, "login-btn"))
+            )
+
+            login_btn = self.driver.find_element(By.CLASS_NAME, "login-btn")
+            if login_btn.is_displayed() and login_btn.is_enabled():
+                login_btn.click()
+            else:
+                return False
+        except Exception as e:
+            logger.error(f"登录圆通失败: {e}")
+            raise  # 重新抛出异常
+    
+    
