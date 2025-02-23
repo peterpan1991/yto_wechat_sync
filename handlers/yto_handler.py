@@ -18,6 +18,7 @@ from config import YTO_MESSAGE_FORMATS, YTO_SERVICE_ID, NEW_YTO_MESSAGE_COUNT, O
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.common.action_chains import ActionChains
 
 class YtoHandler:
     def __init__(self, redis_queue):
@@ -31,7 +32,7 @@ class YtoHandler:
         """初始化浏览器"""
         try:
             # 打开浏览器的调试端口
-            # chrome --remote-debugging-port=9222
+            # chrome --remote-debugging-port=9111
 
             # 连接到已打开的浏览器
             options = Options()
@@ -212,10 +213,22 @@ class YtoHandler:
                 EC.presence_of_element_located((By.CLASS_NAME, "login-btn"))
             )
 
+            logger.info("check login button")
             login_btn = self.driver.find_element(By.CLASS_NAME, "login-btn")
             if login_btn.is_displayed() and login_btn.is_enabled():
-                login_btn.click()
+                print("found login button")
+                actions = ActionChains(self.driver)
+                actions.move_to_element(login_btn).click().perform()
+                
+                # #找到专属客服
+                customer_service_div = WebDriverWait(self.driver, 10).until(
+                    EC.presence_of_element_located((By.XPATH, '//div[contains(text(), "专属客服")]'))
+                )
+                # 找到其父级元素并点击
+                parent_element = customer_service_div.find_element(By.XPATH, '..')
+                parent_element.click()
             else:
+                logger.error("not found login btn")
                 return False
         except Exception as e:
             logger.error(f"登录圆通失败: {e}")

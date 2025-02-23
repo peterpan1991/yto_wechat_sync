@@ -102,12 +102,12 @@ class MessageBridge:
                 logger.error(f"执行出错: {e}")
                 self.is_running = False
 
-    def run(self):
+    def run(self):        
 
         """运行消息桥接服务"""
         if not self.init():
             logger.error("初始化失败，程序退出")
-            return
+            return               
 
         time.sleep(10)
 
@@ -120,10 +120,14 @@ class MessageBridge:
                 # 获取当前时间
                 now = datetime.now()
                 # 检查是否达到晚上23点
-                if now.hour == 23 and now.minute >= 55:
-                    logger.info("到达晚上23点50分，正在关闭...")
-                    self.is_running = False
-                time.sleep(1)
+                if now.hour == 23 and now.minute >= 59:
+                    logger.info("到达晚上23点59分，正在关闭...")
+                    
+                time.sleep(120)
+
+                self.yto.login()
+
+                time.sleep(10)
         except KeyboardInterrupt:
             logger.info("接收到退出信号，正在关闭...")
             self.is_running = False
